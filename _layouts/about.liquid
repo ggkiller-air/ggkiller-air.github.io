@@ -60,7 +60,7 @@ layout: default
     {% if page.selected_papers %}
       <h2>
         <a href="{{ '/publications/' | relative_url }}" style="color: inherit">
-          {{ page.publications_title | default: "selected publications" }}
+          {{ page.publications_title | default: 'selected publications' }}
         </a>
       </h2>
       {% include selected_papers.liquid %}

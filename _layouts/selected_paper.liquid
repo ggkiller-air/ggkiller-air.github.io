@@ -53,9 +53,13 @@
         {% endif %}
         {% unless forloop.first %}, {% endunless %}
         {% if author_is_self %}
-          <strong>{{ author.first }} {{ author_last_html }}</strong>
+          <strong>
+            {{- author.first }}
+            {{ author_last_html -}}
+          </strong>
         {% else %}
-          {{ author.first }} {{ author_last_html }}
+          {{ author.first }}
+          {{ author_last_html }}
         {% endif %}
       {% endfor %}
     </div>
@@ -99,6 +103,5 @@
         <a href="{{ entry.code }}">code</a>
       {% endif %}
     </div>
-
   </div>
 </div>
