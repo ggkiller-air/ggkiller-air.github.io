@@ -1,0 +1,104 @@
+---
+---
+<div class="selected-paper-entry {% unless entry.preview_video or entry.preview %}no-thumbnail{% endunless %}">
+  {% if entry.preview_video or entry.preview %}
+    <div class="selected-paper-thumbnail">
+      {% if entry.preview_video %}
+        {% if entry.preview_video contains '://' %}
+          <video class="preview z-depth-1 rounded" src="{{ entry.preview_video }}" controls muted playsinline preload="metadata"></video>
+        {% else %}
+          <video
+            class="preview z-depth-1 rounded"
+            src="{{ entry.preview_video | prepend: '/assets/video/' | relative_url }}"
+            controls
+            muted
+            playsinline
+            preload="metadata"
+          ></video>
+        {% endif %}
+      {% elsif entry.preview contains '://' %}
+        <img class="preview z-depth-1 rounded" src="{{ entry.preview }}" alt="{{ entry.title }}">
+      {% else %}
+        {% assign entry_path = entry.preview | prepend: '/assets/img/publication_preview/' %}
+        {%
+          include figure.liquid
+          loading="eager"
+          path=entry_path
+          sizes="180px"
+          class="preview z-depth-1 rounded"
+          avoid_scaling=true
+          alt=entry.preview
+        %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="selected-paper-body">
+    <div class="selected-paper-title">
+      {% assign paper_link = entry.html | default: entry.url %}
+      {% if paper_link %}
+        <a href="{{ paper_link }}">{{ entry.title }}</a>
+      {% else %}
+        {{ entry.title }}
+      {% endif %}
+    </div>
+
+    <div class="selected-paper-authors">
+      {% for author in entry.author_array %}
+        {% assign author_is_self = false %}
+        {%- assign author_last_name = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+        {%- assign author_last_html = author.last | regex_replace: '([*∗†‡§¶‖&^]+)', '<sup>\1</sup>' -%}
+        {% if site.scholar.last_name contains author_last_name and site.scholar.first_name contains author.first %}
+          {% assign author_is_self = true %}
+        {% endif %}
+        {% unless forloop.first %}, {% endunless %}
+        {% if author_is_self %}
+          <strong>{{ author.first }} {{ author_last_html }}</strong>
+        {% else %}
+          {{ author.first }} {{ author_last_html }}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% assign proceedings = 'inproceedings,incollection' | split: ',' %}
+    {% if entry.type == 'article' %}
+      {% capture venue_line %}<em>{{ entry.journal }}</em>{% endcapture %}
+    {% elsif proceedings contains entry.type %}
+      {% capture venue_line %}<em>{{ entry.booktitle }}</em>{% endcapture %}
+    {% else %}
+      {% capture venue_line %}{% if entry.publisher %}<em>{{ entry.publisher }}</em>{% endif %}{% endcapture %}
+    {% endif %}
+    {% if entry.note %}
+      {% capture venue_line %}{{ entry.note }}{% if entry.year %}, {{ entry.year }}{% endif %}{% endcapture %}
+    {% elsif entry.year %}
+      {% capture venue_line %}{{ venue_line }}{% if venue_line != blank %}, {% endif %}{{ entry.year }}{% endcapture %}
+    {% endif %}
+    <div class="selected-paper-venue">{{ venue_line }}</div>
+
+    <div class="selected-paper-links">
+      {% if entry.website %}
+        <a href="{{ entry.website }}">project page</a>
+      {% endif %}
+      {% if entry.html %}
+        {% if entry.website %} / {% endif %}
+        <a href="{{ entry.html }}">paper</a>
+      {% elsif entry.url %}
+        {% if entry.website %} / {% endif %}
+        <a href="{{ entry.url }}">paper</a>
+      {% endif %}
+      {% if entry.pdf %}
+        {% if entry.website or entry.html or entry.url %} / {% endif %}
+        {% if entry.pdf contains '://' %}
+          <a href="{{ entry.pdf }}">pdf</a>
+        {% else %}
+          <a href="{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}">pdf</a>
+        {% endif %}
+      {% endif %}
+      {% if entry.code %}
+        {% if entry.website or entry.html or entry.url or entry.pdf %} / {% endif %}
+        <a href="{{ entry.code }}">code</a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>

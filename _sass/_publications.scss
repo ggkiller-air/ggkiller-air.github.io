@@ -41,6 +41,8 @@
 
       .preview {
         display: inline-block;
+        width: 100%;
+        height: auto;
       }
 
       .abbr {
@@ -69,6 +71,8 @@
 
       .title {
         font-weight: bolder;
+        font-size: 1.2rem;
+        line-height: 1.35;
       }
 
       .author {
@@ -81,9 +85,9 @@
           }
         }
 
-        > em {
-          border-bottom: 1px solid;
+        > strong.self-author {
           font-style: normal;
+          font-weight: 700;
         }
 
         > span.more-authors {
@@ -178,6 +182,90 @@
     }
     div.award.hidden.open {
       border-color: var(--global-highlight-color);
+    }
+  }
+}
+
+.selected-publications {
+  margin-top: 0;
+
+  .bibliography {
+    li {
+      margin-bottom: 1.75rem;
+    }
+  }
+
+  .selected-paper-entry {
+    display: grid;
+    grid-template-columns: minmax(120px, 170px) 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .selected-paper-entry.no-thumbnail {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-paper-thumbnail {
+    .preview,
+    img {
+      width: 100%;
+      max-width: 170px;
+      height: auto;
+      display: block;
+    }
+  }
+
+  .selected-paper-title {
+    font-size: 1.28rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 0.28rem;
+
+    a {
+      color: var(--global-theme-color);
+    }
+  }
+
+  .selected-paper-authors {
+    font-size: 1rem;
+    line-height: 1.45;
+    margin-bottom: 0.25rem;
+  }
+
+  .selected-paper-venue {
+    font-size: 0.98rem;
+    color: var(--global-text-color-light);
+    margin-bottom: 0.28rem;
+  }
+
+  .selected-paper-links {
+    font-size: 0.98rem;
+    margin-bottom: 0;
+
+    a {
+      color: var(--global-theme-color);
+    }
+  }
+
+  .selected-paper-abstract {
+    line-height: 1.45;
+    max-width: 44rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .selected-publications {
+    .selected-paper-entry {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .selected-paper-thumbnail {
+      .preview,
+      img {
+        max-width: 220px;
+      }
     }
   }
 }
